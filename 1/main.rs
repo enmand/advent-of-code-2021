@@ -10,8 +10,14 @@ fn main() {
     let args = env::args().collect::<Vec<String>>();
     let input = args_file(args, 1);
 
-    println!("single increases {}", point_increasese(input.as_str()));
-    println!("slide increases {}", slide_increasese(input.as_str()));
+    let f = File::open(input).expect("file not found");
+    let r = BufReader::new(f)
+        .lines()
+        .map(|l| l.unwrap().parse::<i32>().unwrap())
+        .collect::<Vec<i32>>();
+
+    println!("single increases {}", point_increasese(r.clone()));
+    println!("slide increases {}", slide_increasese(r.clone()));
 }
 
 fn args_file(args: Vec<String>, skip: usize) -> String {
@@ -29,39 +35,26 @@ fn args_file(args: Vec<String>, skip: usize) -> String {
     }
 }
 
-fn point_increasese(input: &str) -> i32 {
-    let f = File::open(input).expect("file not found");
-    let r = BufReader::new(f)
-        .lines()
-        .map(|l| l.unwrap().parse::<i32>().unwrap())
-        .collect::<Vec<i32>>();
-
+fn point_increasese(r: Vec<i32>) -> i32 {
     increasing(r)
 }
 
-fn slide_increasese(input: &str) -> i32 {
-    let f = File::open(input).expect("file not found");
-    let mut r = BufReader::new(f)
-        .lines()
-        .map(|l| l.unwrap().parse::<i32>().unwrap())
-        .collect::<Vec<i32>>();
+fn slide_increasese(r: Vec<i32>) -> i32 {
+    increasing(
+        r.iter()
+            .enumerate()
+            .map(|(i, x)| {
+                if i + WINDOW_SIZE > r.len() {
+                    return 0;
+                }
 
-    r = r
-        .iter()
-        .enumerate()
-        .map(|(i, x)| {
-            if i + WINDOW_SIZE > r.len() {
-                return 0;
-            }
+                let next = r[i + 1];
+                let next_next = r[i + 2];
 
-            let next = r[i + 1];
-            let next_next = r[i + 2];
-
-            next + next_next + *x
-        })
-        .collect();
-
-    increasing(r)
+                next + next_next + *x
+            })
+            .collect(),
+    )
 }
 
 fn increasing(r: Vec<i32>) -> i32 {
