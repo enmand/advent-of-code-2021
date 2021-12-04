@@ -1,6 +1,6 @@
 extern crate advent;
 
-use ndarray::{iter::Lanes, Array2, ArrayBase, Axis, Dim};
+use ndarray::{iter::Lanes, Array2, Axis, Dim};
 
 use advent::input_from_args;
 
