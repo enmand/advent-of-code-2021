@@ -42,13 +42,13 @@ fn main() {
         })
         .collect::<Vec<_>>();
 
-    println!("{:?}", solve(&draws, boards));
+    println!("{:?}", solve(&draws, &boards));
 }
 
-fn solve(draws: &[i32], boards: Vec<(Array2<(i32, bool)>, bool)>) -> (i32, i32) {
+fn solve(draws: &[i32], boards: &[(Array2<(i32, bool)>, bool)]) -> (i32, i32) {
     let mut win = 0;
     let mut loss = 0;
-    let mut checks: Vec<(Array2<(i32, bool)>, bool)> = boards.clone();
+    let mut checks: Vec<(Array2<(i32, bool)>, bool)> = boards.clone().to_vec();
 
     for draw in draws {
         checks = checks
