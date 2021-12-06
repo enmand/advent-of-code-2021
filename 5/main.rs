@@ -23,7 +23,7 @@ impl PointExt for Line {
                 ps.push((*x1, y));
             }
         } else {
-            let m = slope(self) as i32;
+            let m = slope(self) as i32; // slope is only 0, 1, -1 or inf so it's safe to cast
             let b = y1 - m * x1;
 
             let x = *x1.min(x2)..=*x2.max(x1);
@@ -63,11 +63,10 @@ fn main() {
 fn horizontal_lines(lines: &Vec<Line>) -> Vec<Point> {
     lines
         .into_iter()
-        .map(|l| l.clone())
-        .filter(|l| slope(l) == 0.0 || slope(l) == std::f64::INFINITY)
-        .fold(Vec::new(), |mut acc: Vec<Point>, l: Line| {
+        .filter(|&l| slope(l) == 0.0 || slope(l) == std::f64::INFINITY)
+        .fold(Vec::new(), |mut acc: Vec<Point>, l: &Line| {
             let p = l.points();
-            acc.extend(p.clone());
+            acc.extend(p);
             acc
         })
         .into_iter()
@@ -77,10 +76,9 @@ fn horizontal_lines(lines: &Vec<Line>) -> Vec<Point> {
 fn all_lines(lines: &Vec<Line>) -> Vec<Point> {
     lines
         .into_iter()
-        .map(|l| l.clone())
-        .fold(Vec::new(), |mut acc: Vec<Point>, l: Line| {
+        .fold(Vec::new(), |mut acc: Vec<Point>, l: &Line| {
             let p = l.points();
-            acc.extend(p.clone());
+            acc.extend(p);
             acc
         })
         .into_iter()
