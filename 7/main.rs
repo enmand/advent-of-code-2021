@@ -1,5 +1,3 @@
-use std::vec;
-
 extern crate advent;
 
 fn main() {
