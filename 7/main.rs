@@ -23,7 +23,7 @@ where
         .clone()
         .into_iter()
         .max()
-        .expect("unable to determine vertical rows"))
+        .expect("unable to determine column count"))
         .map(|v| input.clone().into_iter().map(|n| f((n - v).abs())).sum())
         .min()
         .expect("unable to determine minimum")
